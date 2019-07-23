@@ -1,8 +1,19 @@
-/* add css styles here (optional) */
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+}
 
-.test {
-  display: inline-block;
-  margin: 2em auto;
-  border: 2px solid #000;
-  font-size: 2em;
+.magnifying-glass {
+  z-index: 10;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }

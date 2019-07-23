@@ -1,7 +1,7 @@
-import ExampleComponent from './'
+import Magnifier from './'
 
-describe('ExampleComponent', () => {
+describe('Magnifier', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(Magnifier).toBeTruthy()
   })
 })
