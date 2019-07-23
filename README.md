@@ -15,12 +15,21 @@ npm install --save react-magnifying-glass
 ```tsx
 import * as React from 'react'
 
-import MyComponent from 'react-magnifying-glass'
+import Magnifier from 'react-magnifying-glass'
 
 class Example extends React.Component {
   render () {
+    const zoomFactor = 3
+    const glassWidth = 150
+    const glassHeight = 150
     return (
-      <MyComponent />
+      <Magnifier
+        imageUrl="http://www.google.com/logos/2011/worldsfair11-hp.jpg"
+        imgAlt="small image"
+        zoomFactor={zoomFactor}
+        glassHeight={glassHeight}
+        glassWidth={glassWidth}
+        largeImageUrl="https://s3.amazonaws.com/images.seroundtable.com/worldsfair11-hr-1304251656.jpg" />
     )
   }
 }
