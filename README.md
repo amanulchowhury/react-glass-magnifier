@@ -1,6 +1,6 @@
 # react-magnifying-glass
 
-> A React image magnifying glass
+> A React image magnifying glass component. [Example](https://amanulchowhury.github.io/react-magnifying-glass/)
 
 [![NPM](https://img.shields.io/npm/v/react-magnifying-glass.svg)](https://www.npmjs.com/package/react-magnifying-glass) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
