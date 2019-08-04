@@ -8,11 +8,17 @@
   padding: 2px;
 }
 
+.container:hover .magnifying-glass {
+  opacity: 1;
+}
+
 .magnifying-glass {
   z-index: 10;
   position: absolute;
   background-repeat: no-repeat;
-  background-color: transparent;
+  background-color: white;
+  border: 8px solid #be9a35;
+  border-radius: 50%;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
