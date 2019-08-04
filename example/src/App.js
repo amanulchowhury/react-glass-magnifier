@@ -10,12 +10,12 @@ export default class App extends Component {
     return (
       <div className="image-container">
         <Magnifier
-          imageUrl="http://www.google.com/logos/2011/worldsfair11-hp.jpg"
+          imageUrl="images/daylight-environment-forest-small.jpg"
           imgAlt="small image"
           zoomFactor={this.zoomFactor}
           glassHeight={this.glassHeight}
           glassWidth={this.glassWidth}
-          largeImageUrl="https://s3.amazonaws.com/images.seroundtable.com/worldsfair11-hr-1304251656.jpg" />
+          largeImageUrl="images/daylight-environment-forest-large.jpg" />
       </div>
     )
   }
