@@ -15,7 +15,7 @@ npm install --save react-glass-magnifier
 ```tsx
 import * as React from 'react'
 
-import Magnifier from 'react-magnifying-glass'
+import Magnifier from 'react-glass-magnifier'
 
 class Example extends React.Component {
   render () {
