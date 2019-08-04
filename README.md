@@ -1,4 +1,4 @@
-# react-magnifying-glass
+# react-glass-magnifier
 
 > A React image magnifying glass component. [Example](https://amanulchowhury.github.io/react-magnifying-glass/)
 
@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save react-magnifying-glass
+npm install --save react-glass-magnifier
 ```
 
 ## Usage
