@@ -19,17 +19,17 @@ import Magnifier from 'react-glass-magnifier'
 
 class Example extends React.Component {
   render () {
-    const zoomFactor = 3
-    const glassWidth = 150
-    const glassHeight = 150
     return (
-      <Magnifier
-        imageUrl="http://www.google.com/logos/2011/worldsfair11-hp.jpg"
-        imgAlt="small image"
-        zoomFactor={zoomFactor}
-        glassHeight={glassHeight}
-        glassWidth={glassWidth}
-        largeImageUrl="https://s3.amazonaws.com/images.seroundtable.com/worldsfair11-hr-1304251656.jpg" />
+      <div className="image-container">
+        <Magnifier
+          imageUrl="images/daylight-environment-forest-small.jpg"
+          imgAlt="small image"
+          zoomFactor={3}
+          glassDimension={200}
+          largeImageUrl="images/daylight-environment-forest-large.jpg"
+          glassBorderColor="red"
+          glassBorderWidth={2} />
+      </div>
     )
   }
 }

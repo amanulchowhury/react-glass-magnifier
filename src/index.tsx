@@ -1,18 +1,19 @@
-import * as React from 'react';
-import styles from './styles.css';
+import * as React from 'react'
+import styles from './styles.css'
 
 interface MagnifierProps {
-    imageUrl: string;
-    largeImageUrl: string;
-    zoomFactor: number;
-    imgAlt: string;
-    glassHeight: number
-    glassWidth: number
+    imageUrl: string
+    largeImageUrl: string
+    zoomFactor: number
+    imgAlt: string
+    glassDimension: number
+    glassBorderColor: string
+    glassBorderWidth: number
 }
 
 interface MousePosition {
-    x: number;
-    y: number;
+    x: number
+    y: number
 }
 
 enum CursorType {
@@ -23,11 +24,53 @@ enum CursorType {
 export default class Magnifier extends React.PureComponent<MagnifierProps> {
     imgEl: HTMLElement;
     glass: HTMLElement;
-    
-    handleMouseMove = (evt: MouseEvent): void => {
-        evt.preventDefault();
+    touchMoveListenerAdded: boolean = false
 
-        if (evt.target !== this.imgEl) {
+    constructor(props: MagnifierProps) {
+        super(props)
+        this.handleTouchStart = this.handleTouchStart.bind(this)
+    }
+
+    componentDidMount() {
+        this.imgEl.addEventListener('mousemove', this.handleMouseMove)
+        this.imgEl.addEventListener('touchstart', this.handleTouchStart)
+        this.setGlassStyles()
+    }
+
+    componentWillUnmount(): void {
+      this.imgEl.removeEventListener('mousemove', this.handleMouseMove)
+      this.imgEl.removeEventListener('touchmove', this.handleMouseMove)
+      this.imgEl.removeEventListener('touchstart', this.handleTouchStart)
+    }
+
+    render(): React.ReactElement {
+        return (<div className={styles.container}>
+            <img 
+                src={this.props.imageUrl}
+                alt={this.props.imgAlt}
+                ref={(img: HTMLImageElement):void => {
+                    this.imgEl = img
+                }}
+            />
+            <div className={styles['magnifying-glass']}
+                ref={(glass: HTMLDivElement):void => {
+                    this.glass = glass
+                }}
+            ></div>
+        </div>)
+    }
+
+    handleMouseMove = (evt: any): void => {
+        evt.preventDefault();
+        const isTouch = evt.type === 'touchmove' || evt.type === 'touchstart'
+        
+        this.handleImagePosition(evt as MouseEvent, isTouch)
+    }
+
+    handleImagePosition(evt: any, touch: boolean = false) {
+        const target = touch ? evt.targetTouches[0].target : evt.target
+
+        if (target !== this.imgEl) {
             window.requestAnimationFrame(() => {
                 this.imgEl.style.cursor = CursorType.NORMAL
             })
@@ -36,8 +79,8 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
 
         window.requestAnimationFrame(() => {
             const cursorPosition: MousePosition = {
-                x: evt.pageX,
-                y: evt.pageY
+                x: touch ? evt.targetTouches[0].pageX : evt.pageX,
+                y: touch ? evt.targetTouches[0].pageY : evt.pageY
             }
             const imgRect: ClientRect = this.imgEl.getBoundingClientRect()
             const glassOffset: number = this.glass.offsetWidth / 2
@@ -56,35 +99,23 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
         })
     }
 
-    constructor(props: MagnifierProps) {
-        super(props);
+    handleTouchStart() {
+        if (this.touchMoveListenerAdded) {
+            this.imgEl.removeEventListener('touchmove', this.handleMouseMove)
+            this.touchMoveListenerAdded = false
+            console.log('removed')
+        }
+
+        this.imgEl.addEventListener('touchmove', this.handleMouseMove)
+        this.touchMoveListenerAdded = true
+        console.log('added')
     }
 
-    componentDidMount() {
-        this.imgEl.addEventListener('mousemove', this.handleMouseMove)
+    setGlassStyles() {
         this.glass.style.backgroundImage = `url("${this.props.largeImageUrl}")`
-        this.glass.style.height = `${this.props.glassHeight}px`
-        this.glass.style.width = `${this.props.glassWidth}px`
-    }
-
-    componentWillUnmount(): void {
-      this.imgEl.removeEventListener('mousemove', this.handleMouseMove)
-    }
-
-    render(): React.ReactElement {
-        return (<div className={styles.container}>
-            <img 
-                src={this.props.imageUrl}
-                alt={this.props.imgAlt}
-                ref={(img: HTMLImageElement):void => {
-                    this.imgEl = img;
-                }}
-            />
-            <div className={styles['magnifying-glass']}
-                ref={(glass: HTMLDivElement):void => {
-                    this.glass = glass;
-                }}
-            ></div>
-        </div>)
+        this.glass.style.height = `${this.props.glassDimension || 150}px`
+        this.glass.style.width = `${this.props.glassDimension || 150}px`
+        this.glass.style.borderColor = this.props.glassBorderColor || '#be9a35'
+        this.glass.style.borderWidth = `${this.props.glassBorderWidth || 8}px`
     }
 }

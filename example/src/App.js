@@ -12,10 +12,11 @@ export default class App extends Component {
         <Magnifier
           imageUrl="images/daylight-environment-forest-small.jpg"
           imgAlt="small image"
-          zoomFactor={this.zoomFactor}
-          glassHeight={this.glassHeight}
-          glassWidth={this.glassWidth}
-          largeImageUrl="images/daylight-environment-forest-large.jpg" />
+          zoomFactor={3}
+          glassDimension={200}
+          largeImageUrl="images/daylight-environment-forest-large.jpg"
+          glassBorderColor="red"
+          glassBorderWidth={2} />
       </div>
     )
   }
