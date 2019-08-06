@@ -29,11 +29,13 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
     constructor(props: MagnifierProps) {
         super(props)
         this.handleTouchStart = this.handleTouchStart.bind(this)
+        this.handleTouchEnd = this.handleTouchEnd.bind(this)
     }
 
     componentDidMount() {
         this.imgEl.addEventListener('mousemove', this.handleMouseMove)
         this.imgEl.addEventListener('touchstart', this.handleTouchStart)
+        this.imgEl.addEventListener('touchend', this.handleTouchEnd)
         this.setGlassStyles()
     }
 
@@ -41,6 +43,7 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
       this.imgEl.removeEventListener('mousemove', this.handleMouseMove)
       this.imgEl.removeEventListener('touchmove', this.handleMouseMove)
       this.imgEl.removeEventListener('touchstart', this.handleTouchStart)
+      this.imgEl.removeEventListener('touchend', this.handleTouchEnd)
     }
 
     render(): React.ReactElement {
@@ -60,6 +63,9 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
         </div>)
     }
 
+    /**
+     * Mouse/Touch move handler
+     */
     handleMouseMove = (evt: any): void => {
         evt.preventDefault();
         const isTouch = evt.type === 'touchmove' || evt.type === 'touchstart'
@@ -67,15 +73,28 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
         this.handleImagePosition(evt as MouseEvent, isTouch)
     }
 
+    /**
+     * hides the glass
+     */
+    removeGlass() {
+        window.requestAnimationFrame(() => {
+            this.imgEl.style.cursor = CursorType.NORMAL
+        })
+    }
+
+    /**
+     * Position the glass according the pointer position
+     * @param evt event
+     * @param touch indicates whether is a touch event
+     */
     handleImagePosition(evt: any, touch: boolean = false) {
         const target = touch ? evt.targetTouches[0].target : evt.target
 
         if (target !== this.imgEl) {
-            window.requestAnimationFrame(() => {
-                this.imgEl.style.cursor = CursorType.NORMAL
-            })
+            this.removeGlass()
             return
         }
+
 
         window.requestAnimationFrame(() => {
             const cursorPosition: MousePosition = {
@@ -99,18 +118,47 @@ export default class Magnifier extends React.PureComponent<MagnifierProps> {
         })
     }
 
-    handleTouchStart() {
+    /**
+     * touch end event handler
+     * @param evt touch event
+     */
+    handleTouchEnd(evt: TouchEvent) {
+        evt.preventDefault()
+
+        this.imgEl.removeEventListener('touchmove', this.handleMouseMove)
+        this.touchMoveListenerAdded = false
+
+        this.removeGlass()
+        this.glass.style.opacity = '0'
+    }
+
+    /**
+     * touch start event handler
+     * @param evt touch event
+     */
+    handleTouchStart(evt: TouchEvent) {
+        evt.preventDefault()
+
         if (this.touchMoveListenerAdded) {
             this.imgEl.removeEventListener('touchmove', this.handleMouseMove)
             this.touchMoveListenerAdded = false
-            console.log('removed')
         }
+
+        if (evt.targetTouches[0].target !== this.imgEl) {
+            this.removeGlass()
+            this.glass.style.opacity = '0'
+            return
+        }
+
+        this.glass.style.opacity = '1'
 
         this.imgEl.addEventListener('touchmove', this.handleMouseMove)
         this.touchMoveListenerAdded = true
-        console.log('added')
     }
 
+    /**
+     * sets glass position and styles
+     */
     setGlassStyles() {
         this.glass.style.backgroundImage = `url("${this.props.largeImageUrl}")`
         this.glass.style.height = `${this.props.glassDimension || 150}px`
